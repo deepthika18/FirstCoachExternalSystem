@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="api-suite.xml" />
+	<munit:test name="firstcoachexternalsystemFlow-test" doc:id="e8d69e3a-fa9c-4566-8d3f-72118c7345f3" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="9a86237f-7649-4b05-8c82-56e51d093ca6" >
+				<munit:payload value="#[readUrl('classpath://firstcoachexternalsystemFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://firstcoachexternalsystemFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to firstcoachexternalsystemFlow" doc:id="df5ee053-60fd-4608-b29c-9f23aa0cf9dd" name="firstcoachexternalsystemFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="c7bd0559-cce4-4ec9-9447-67f27a320e47" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import firstcoachexternalsystemFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify routes-flow" doc:id="a193a1de-aa96-440a-a06f-d92b957ba2d5" processor="flow-ref" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="17e434a6-293f-445c-b8c9-a937fc332972" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify serviceType" doc:id="e85e3101-e9e6-417b-8f37-a898f4bceb4d" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2f012468-148a-497b-a489-a201702d290a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="firstcoachexternalsystemFlow-test1" doc:id="3e49928d-c4c4-405f-bab0-764e42720cf6" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="4bc49321-c1a7-41c1-bf08-3a71b4dcc85c" >
+				<munit:payload value="#[readUrl('classpath://firstcoachexternalsystemFlowtest1\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://firstcoachexternalsystemFlowtest1\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to firstcoachexternalsystemFlow" doc:id="4419e53a-b31c-4581-a569-22b0ab3ec3a3" name="firstcoachexternalsystemFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="2b20f588-235a-48a9-9047-7abbe74bbc5f" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import firstcoachexternalsystemFlowtest1::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify schedules-flow" doc:id="0caaef2f-f150-4bf9-a6f9-bee3106ee170" processor="flow-ref" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d32400a1-aebe-4eae-b941-5406a75f666a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify serviceType" doc:id="49038573-0351-49fb-a819-a1f1be9a97b5" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2f012468-148a-497b-a489-a201702d290a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

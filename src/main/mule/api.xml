@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="firstcoachexternalsystemFlow" doc:id="06fed000-2751-485c-bb1d-a536315073c9" >
+		<http:listener doc:name="Listener" doc:id="a1263b7a-0aed-4a3e-91eb-a1a4540c423f" config-ref="HTTP_Listener_config" path="${http.listner.path}"/>
+		<ee:transform doc:name="serviceType" doc:id="2f012468-148a-497b-a489-a201702d290a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="serviceType" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.serviceType]]></ee:set-variable>
+				<ee:set-variable variableName="transcationId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionId]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Request Logger" doc:id="013801c7-56dd-4a4a-a610-af5b69f18cdf" message="Request Received for FirstCoach External System #[vars.transactionId]"/>
+		<choice doc:name="Choice" doc:id="72146427-c619-439f-b604-1ab5cd845ebb" >
+			<when expression='#[vars.serviceType == "fetchRoutes"]'>
+				<flow-ref doc:name="routes-flow" doc:id="17e434a6-293f-445c-b8c9-a937fc332972" name="routesFlow"/>
+			</when>
+			<when expression='#[vars.serviceType =="fetchSchedules"]'>
+				<flow-ref doc:name="schedules-flow" doc:id="d32400a1-aebe-4eae-b941-5406a75f666a" name="scheduleFlow"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="bebc72e8-89e6-4990-97e2-0ed5529b56fa" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Response Logger" doc:id="ec47f5f7-4035-4910-8e71-7065107d1f78" message="Reponse Sent For FirstCoach External System #[vars.transactionId]"/>
+	</flow>
+</mule>

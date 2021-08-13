@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="scheduleFlow" doc:id="1908cf6e-9747-4758-a913-80494a1dcaff" >
+		<ee:transform doc:name="input message" doc:id="33c5a503-8d37-449d-b5ad-02b48feb11a9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    "originLocation": {
+      "locationCode": "BEN-SG"
+    },
+    "destinationLocation": {
+      "locationCode": "KLG-MY"
+    }
+  }
+]]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="serviceType" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="output message" doc:id="6586c517-d598-43ed-bec0-14af68ffa63d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map(value,index)->
+{
+  "schedules": [
+    {
+      "departureDateTime": "2019-04-30T16:41:41.090Z",
+      "fromLocation": value.originLocation.locationCode ,
+      "toLocation": value.destinationLocation.locationCode,
+      "availableSeats": 50
+    },
+    {
+      "departureDateTime": "2019-04-30T18:41:41.090Z",
+      "fromLocation": value.originLocation.locationCode,
+      "toLocation": value.destinationLocation.locationCode,
+      "availableSeats": 10
+    }
+  ]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="8a9cef69-ada9-45e1-acf8-dee680e1ba2a" />
+		<ee:transform doc:name="Transform Message" doc:id="779971cc-2047-4d76-8d20-c343183c03ef" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

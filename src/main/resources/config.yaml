@@ -1,0 +1,14 @@
+http:
+  listner:
+    host: "localhost"
+    port: "8083"
+    path: "/FirstCoach/{serviceType}"
+db:
+  oracle:
+    host: "localhost"
+    port: "1521"
+    username: "dummy"
+    password: "dummy"
+    instance: ""
+    servicename: "ORCLCDB.localdomain"
+    
